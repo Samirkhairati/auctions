@@ -1,5 +1,5 @@
 import React from 'react'
-import { CircleUserIcon } from '@/components/icons'
+import { CircleUserIcon } from '@/components/layout/icons'
 import { Button } from '@/components/ui/button'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuLabel, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
 

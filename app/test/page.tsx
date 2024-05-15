@@ -1,10 +1,11 @@
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { SheetTrigger, SheetContent, Sheet } from "@/components/ui/sheet"
-import { CircleUserIcon, MenuIcon, Package2Icon, SearchIcon } from "@/components/icons"
-import SearchBar from "@/components/search-bar"
-import UserMenu from "@/components/user-menu"
+import { CircleUserIcon, MenuIcon, Package2Icon, SearchIcon } from "@/components/layout/icons"
+import SearchBar from "@/components/layout/search-bar"
+import UserMenu from "@/components/layout/user-menu"
 import { ImSpades } from "react-icons/im";
+import ModeToggle from "@/components/layout/mode-toggle"
 
 function NavbarLink({ children, href }: { children: React.ReactNode, href: string }) {
   return (
@@ -60,6 +61,7 @@ export default function Component() {
         </Sheet>
         <div className="flex w-full items-center gap-4 md:ml-auto md:gap-2 lg:gap-4">
           <SearchBar />
+          <ModeToggle />
           <UserMenu />
         </div>
       </header>
