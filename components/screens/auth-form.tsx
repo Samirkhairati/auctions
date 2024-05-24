@@ -1,25 +1,24 @@
-'use client'
+'use client';
 
-import { useCallback, useState, useEffect } from "react"
-import { useRouter } from "next/navigation";
-import { signIn, useSession } from "next-auth/react";
+import axios from "axios";
+import { useCallback, useEffect, useState } from "react";
 import {
     FieldValues,
     SubmitHandler,
-    useForm,
-} from "react-hook-form"
+    useForm
+} from "react-hook-form";
+import { BsGithub, BsGoogle } from 'react-icons/bs';
 
-import { CardTitle, CardDescription, CardHeader, CardContent, Card } from "@/components/ui/card"
-import { Label } from "@/components/ui/label"
-import { Input } from "@/components/ui/input"
-import Link from "next/link"
-import { Button } from "@/components/ui/button"
+import Input2 from "@/components/layout/input";
+import Button2 from "@/components/layout/button";
+import AuthSocialButton2 from "@/components/layout/auth-icons";
 import { toast } from "react-hot-toast";
-
+import { signIn, useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 type Variant = 'LOGIN' | 'REGISTER';
 
-export default function AuthForm() {
+const AuthForm = () => {
     const session = useSession();
     const router = useRouter();
     const [variant, setVariant] = useState<Variant>('LOGIN');
@@ -57,25 +56,10 @@ export default function AuthForm() {
         setIsLoading(true);
 
         if (variant === 'REGISTER') {
-
-            //TODO: convert to react-query
-            fetch('/api/register', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(data),
-            })
-                .then((response) => {
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok');
-                    }
-                    return response.json();
-                })
+            axios.post('/api/users', data)
                 .then(() => signIn('credentials', data))
                 .catch(() => toast.error('Something went wrong!'))
-                .finally(() => setIsLoading(false));
-
+                .finally(() => setIsLoading(false))
         }
 
         if (variant === 'LOGIN') {
@@ -114,44 +98,131 @@ export default function AuthForm() {
     }
 
     return (
-
-        <Card className="mx-auto max-w-sm">
-            <CardHeader>
-                <CardTitle className="text-2xl">Login</CardTitle>
-                <CardDescription>Enter your email below to login to your account</CardDescription>
-            </CardHeader>
-            <CardContent>
-                <form>
-                    <div className="grid gap-4">
-                        <div className="grid gap-2">
-                            <Label htmlFor="email">Email</Label>
-                            <Input id="email" placeholder="m@example.com" required type="email" />
-                        </div>
-                        <div className="grid gap-2">
-                            <div className="flex items-center">
-                                <Label htmlFor="password">Password</Label>
-                                <Link className="ml-auto inline-block text-sm underline" href="#">
-                                    Forgot your password?
-                                </Link>
-                            </div>
-                            <Input id="password" required type="password" />
-                        </div>
-                        <Button className="w-full" type="submit">
-                            Login
-                        </Button>
-                        <Button className="w-full" variant="outline">
-                            Login with Google
-                        </Button>
+        <div
+            className="
+        mt-8
+        sm:mx-auto
+        sm:w-full
+        sm:max-w-md
+      "
+        >
+            <div
+                className="
+          bg-white
+          px-4
+          py-8
+          shadow
+          sm:rounded-lg
+          sm:px-10
+        "
+            >
+                <form
+                    className="space-y-6"
+                    onSubmit={handleSubmit(onSubmit)}
+                >
+                    {variant === 'REGISTER' && (
+                        <Input2
+                            id="name"
+                            label="Name"
+                            register={register}
+                            errors={errors}
+                            disabled={isLoading}
+                        />
+                    )}
+                    <Input2
+                        id="email"
+                        label="Email address"
+                        type="email"
+                        register={register}
+                        errors={errors}
+                        disabled={isLoading}
+                    />
+                    <Input2
+                        id="password"
+                        label="Password"
+                        type="password"
+                        register={register}
+                        errors={errors}
+                        disabled={isLoading}
+                    />
+                    <div>
+                        <Button2
+                            disabled={isLoading}
+                            fullWidth
+                            type="submit"
+                        >
+                            {variant === 'LOGIN' ? 'Sign in' : 'Register'}
+                        </Button2>
                     </div>
                 </form>
 
-                <div className="mt-4 text-center text-sm">
-                    Don &apos t have an account?
-                    <Link className="underline" href="#">
-                        Sign up
-                    </Link>
+                <div className="mt-6">
+                    <div className="relative">
+                        <div
+                            className="
+                                        absolute
+                                        inset-0
+                                        flex
+                                        items-center
+                                    "
+                        >
+                            <div
+                                className="
+                                        w-full 
+                                        border-t 
+                                        border-gray-300"
+                            />
+                        </div>
+                        <div className="
+                                    relative 
+                                    flex 
+                                    justify-center 
+                                    text-sm
+                                    "
+                        >
+                            <span className="
+                                        bg-white 
+                                        px-2 
+                                        text-gray-500">
+                                Or continue with
+                            </span>
+                        </div>
+                    </div>
+
+                    <div className="mt-6 flex gap-2">
+                        <AuthSocialButton2
+                            icon={BsGithub}
+                            onClick={() => socialAction('github')}
+                        />
+                        <AuthSocialButton2
+                            icon={BsGoogle}
+                            onClick={() => socialAction('google')}
+                        />
+                    </div>
                 </div>
-            </CardContent>
-        </Card>
-    )
+
+                <div className="
+                                flex
+                                gap-2
+                                justify-center
+                                text-sm
+                                mt-6
+                                px-2
+                                text-gray-500
+                                ">
+                    <div>
+                        {variant === 'LOGIN' ? 'New to Messenger?' : 'Already have an account?'}
+                    </div>
+                    <div
+                        onClick={toggleVariant}
+                        className="underline cursor-pointer"
+                    >
+                        {variant === 'LOGIN' ? 'Create an account' : 'Login'}
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
 }
+
+export default AuthForm;
