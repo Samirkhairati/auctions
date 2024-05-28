@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button"
 import { SheetTrigger, SheetContent, Sheet } from "@/components/ui/sheet"
-import { CircleUserIcon, MenuIcon, Package2Icon, SearchIcon } from "@/components/layout/icons"
+import {MenuIcon } from "@/components/layout/navbar/icons"
 import SearchBar from "@/components/layout/navbar/search-bar"
 import UserMenu from "@/components/layout/navbar/user-menu"
 import ModeToggle from "@/components/layout/navbar/mode-toggle"
@@ -13,7 +13,7 @@ export default async function Navbar() {
 
     const session = await auth();
     const user = session?.user;
-    console.log
+    console.log(user)
 
     return (
         <header className="sticky top-0 flex h-16 items-center gap-4 border-b bg-background px-4 md:px-6">
@@ -34,7 +34,7 @@ export default async function Navbar() {
                 <SearchBar />
                 <ModeToggle />
                 {user ?
-                    <UserMenu />
+                    <UserMenu user={user} />
                     :
                     <SignInButton />
                 }

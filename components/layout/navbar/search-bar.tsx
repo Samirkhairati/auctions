@@ -1,4 +1,4 @@
-import { SearchIcon } from '@/components/layout/icons'
+import { SearchIcon } from '@/components/layout/navbar/icons'
 import { Input } from '@/components/ui/input'
 const SearchBar = () => {
     return (
