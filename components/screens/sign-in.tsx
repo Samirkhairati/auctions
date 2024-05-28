@@ -1,5 +1,5 @@
 
-import { signIn } from "@/lib/auth"
+import { signIn } from "@/auth"
 
 export function SignIn() {
     return (
@@ -9,7 +9,7 @@ export function SignIn() {
                 await signIn("google")
             }}
         >
-            <button type="submit">Signin with Google</button>
+            <button type="submit">Signin with GitHub</button>
         </form>
     )
-}
+} 
