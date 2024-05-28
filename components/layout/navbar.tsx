@@ -6,13 +6,12 @@ import UserMenu from "@/components/layout/navbar/user-menu"
 import ModeToggle from "@/components/layout/navbar/mode-toggle"
 import MobileNavLinks from "@/components/layout/navbar/mobile-nav-links"
 import DesktopNavLinks from "@/components/layout/navbar/desktop-nav-links"
-import { auth } from "@/auth"
+import session from "@/lib/session";
 import SignInButton from "./navbar/sign-in-button"
 
 export default async function Navbar() {
 
-    const session = await auth();
-    const user = session?.user;
+    const user = (await session())?.user;
     console.log(user)
 
     return (

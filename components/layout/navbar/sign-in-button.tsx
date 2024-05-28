@@ -4,7 +4,7 @@ import Link from "next/link"
 function SignInButton() {
     return (
         <Button variant="outline">
-            <Link href="/login">
+            <Link href="/api/auth/signin">
                 Sign In
             </Link>
         </Button>
