@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button"
 import { SheetTrigger, SheetContent, Sheet } from "@/components/ui/sheet"
-import {MenuIcon } from "@/components/layout/navbar/icons"
+import {MenuIcon } from "@/components/layout/icons"
 import SearchBar from "@/components/layout/navbar/search-bar"
 import UserMenu from "@/components/layout/navbar/user-menu"
 import ModeToggle from "@/components/layout/navbar/mode-toggle"

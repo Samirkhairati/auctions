@@ -1,6 +1,6 @@
 'use client'
 
-import { CircleUserIcon } from '@/components/layout/navbar/icons'
+import { CircleUserIcon } from '@/components/layout/icons'
 import { Button } from '@/components/ui/button'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuLabel, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
 import { User } from 'next-auth'
