@@ -8,40 +8,75 @@ import { Textarea } from "@/components/ui/textarea"
 import Image from "next/image"
 import { CloudUploadIcon, XIcon, CalendarDaysIcon } from "@/components/layout/icons"
 import { useEffect, useState } from "react"
+import toast from "react-hot-toast"
+import { Loader2 } from "lucide-react"
+import Preview from "../layout/preview"
+
+interface UploadedFile {
+    resource_type: string;
+    secure_url: string;
+}
+
+
 function ItemForm() {
 
-    // FORM STATE
+    // FORM FIELDS
     const [name, setName] = useState<string>("")
     const [description, setDescription] = useState<string>("")
     const [price, setPrice] = useState<number>(0)
     const [date, setDate] = useState<Date | undefined>(() => new Date(new Date().setDate(new Date().getDate() + 1)));
+    const [files, setFiles] = useState<UploadedFile[]>([])
 
+    // LOADING STATES
+    const [fileLoading, setFileLoading] = useState<boolean>(false)
+    const [formLoading, setFormLoading] = useState<boolean>(false)
+
+    const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+
+        const data = new FormData();
+        data.append('file', e.target.files![0]);
+        data.append('upload_preset', 'preset');
+
+        try {
+            setFileLoading(true)
+            const result = await fetch('https://api.cloudinary.com/v1_1/dkytadhg9/auto/upload', {
+                method: 'POST',
+                body: data,
+            });
+            const file = await result.json()
+            setFiles((prev) => [...prev, {
+                resource_type: file.resource_type,
+                secure_url: file.secure_url,
+            }])
+
+        } catch (error) {
+            toast.error("Couldn't upload file")
+        } finally {
+            setFileLoading(false)
+        }
+
+    }
     useEffect(() => {
-        console.log(name, description, price, date)
-    }, [name, description, price, date])
+        console.log(name, description, price, date, files)
+    }, [name, description, price, date, files])
 
     return (
         <form className="space-y-6">
-
 
             <div className="space-y-2">
                 <Label htmlFor="name">Item Name</Label>
                 <Input onChange={(e) => setName(e.target.value)} id="name" placeholder="Enter item name" type="text" />
             </div>
 
-
             <div className="space-y-2">
                 <Label htmlFor="description">Item Description</Label>
                 <Textarea onChange={(e) => setDescription(e.target.value)} id="description" placeholder="Enter item description" rows={3} />
             </div>
 
-
             <div className="space-y-2">
                 <Label htmlFor="price">Base Price</Label>
                 <Input onChange={(e) => setPrice(Number(e.target.value))} id="price" placeholder="Enter base price" type="number" min='0' />
             </div>
-
-
 
             <div>
                 <label className="block text-sm font-medium dark:text-gray-300" htmlFor="date">
@@ -49,7 +84,7 @@ function ItemForm() {
                 </label>
                 <Popover>
                     <PopoverTrigger asChild>
-                        <button className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-primary focus:outline-none focus:ring-primary sm:text-sm" id="date" type="button"><span className="flex items-center justify-between"><span className="truncate">Select a date</span><span className="ml-3 flex-shrink-0"><CalendarDaysIcon className="h-5 w-5" /></span></span></button>
+                        <button className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-primary focus:outline-none focus:ring-primary sm:text-sm" id="date" type="button"><span className="flex items-center justify-between"><span className="truncate">Select a date ({date?.toISOString().slice(0, 10)})</span><span className="ml-3 flex-shrink-0"><CalendarDaysIcon className="h-5 w-5" /></span></span></button>
                     </PopoverTrigger>
                     <PopoverContent align="start" className="w-auto p-0">
                         <Calendar selected={date} onSelect={setDate} initialFocus mode="single" />
@@ -72,37 +107,23 @@ function ItemForm() {
                                 htmlFor="media"
                             >
                                 <span>Upload a file</span>
-                                <input accept="image/*,video/*" className="sr-only" id="media" multiple name="media" type="file" />
+                                <input onChange={handleFileChange} accept="image/*,video/*" className="sr-only" id="media" name="media" type="file" />
                             </label>
                         </div>
                         <p className="text-xs">PNG, JPG, MP4</p>
                     </div>
                 </div>
                 <div className="mt-2 grid grid-cols-3 gap-3">
-                    <div className="relative group">
-                        <Image
-                            alt="Media Preview"
-                            className="h-24 w-full rounded-md object-cover"
-                            height={100}
-                            src="/placeholder.svg"
-                            style={{
-                                aspectRatio: "100/100",
-                                objectFit: "cover",
-                            }}
-                            width={100}
-                        />
-                        <button
-                            className="absolute top-1 right-1 hidden group-hover:block rounded-full bg-gray-800 bg-opacity-70 p-1 text-white hover:bg-gray-900"
-                            type="button"
-                        >
-                            <XIcon className="h-4 w-4" />
-                        </button>
-                    </div>
+
+                    {files.map((file, index) => (
+                        <Preview key={index} {...file} />
+                    ))}
 
                 </div>
             </div>
             <div className="flex justify-end">
-                <Button className=" hover:bg-primary-600" type="submit">
+                <Button disabled={fileLoading} className=" hover:bg-primary-600" type="submit">
+                    {fileLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                     List Item
                 </Button>
             </div>
