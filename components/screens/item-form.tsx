@@ -5,9 +5,8 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
-import Image from "next/image"
 import { CloudUploadIcon, XIcon, CalendarDaysIcon } from "@/components/layout/icons"
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import toast from "react-hot-toast"
 import { Loader2 } from "lucide-react"
 import Preview from "../layout/preview"
@@ -32,6 +31,7 @@ function ItemForm() {
     const [fileLoading, setFileLoading] = useState<boolean>(false)
     const [formLoading, setFormLoading] = useState<boolean>(false)
 
+    // Upload to cloudinary
     const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
 
         const data = new FormData();
@@ -58,6 +58,7 @@ function ItemForm() {
 
     }
 
+    //post data
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
         setFormLoading(true)
