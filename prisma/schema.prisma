@@ -16,6 +16,8 @@ model User {
   role          String?
   accounts      Account[]
   sessions      Session[]
+  items         Item[]
+  bids          Bid[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -64,4 +66,44 @@ model VerificationToken {
 
   @@id([identifier, token])
   @@map("verification_tokens")
+}
+
+model Item {
+  id          String  @id @default(cuid())
+  name        String?
+  description String?
+  basePrice   Float?
+  active      Boolean @default(true)
+  endedAt     DateTime?
+  userId      String
+  user        User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  media       Media[]
+  bids        Bid[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("items")
+}
+
+model Media {
+  id            String @id @default(cuid())
+  resource_type String
+  secure_url    String
+  itemId        String
+  item          Item   @relation(fields: [itemId], references: [id], onDelete: Cascade)
+}
+
+model Bid {
+  id        String  @id @default(cuid())
+  amount    Float
+  itemId    String
+  userId    String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  item Item @relation(fields: [itemId], references: [id], onDelete: Cascade)
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("bids")
 }
