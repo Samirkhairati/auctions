@@ -92,6 +92,8 @@ model Media {
   secure_url    String
   itemId        String
   item          Item   @relation(fields: [itemId], references: [id], onDelete: Cascade)
+
+  @@map("media")
 }
 
 model Bid {

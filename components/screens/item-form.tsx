@@ -11,6 +11,7 @@ import { useEffect, useState } from "react"
 import toast from "react-hot-toast"
 import { Loader2 } from "lucide-react"
 import Preview from "../layout/preview"
+import axios from 'axios';
 
 interface UploadedFile {
     resource_type: string;
@@ -56,12 +57,30 @@ function ItemForm() {
         }
 
     }
-    useEffect(() => {
-        console.log(name, description, price, date, files)
-    }, [name, description, price, date, files])
+
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault()
+        setFormLoading(true)
+        axios.post('/api/items', {
+            name,
+            description,
+            price,
+            date,
+            files
+        })
+            .then(function (response) {
+                toast.success("Item listed successfully")
+                setFormLoading(false)
+
+            })
+            .catch(function (error) {
+                toast.error("Couldn't list item. Make sure all fields are correct." )
+                setFormLoading(false)
+            });
+    }
 
     return (
-        <form className="space-y-6">
+        <form onSubmit={handleSubmit} className="space-y-6">
 
             <div className="space-y-2">
                 <Label htmlFor="name">Item Name</Label>
@@ -122,8 +141,8 @@ function ItemForm() {
                 </div>
             </div>
             <div className="flex justify-end">
-                <Button disabled={fileLoading} className=" hover:bg-primary-600" type="submit">
-                    {fileLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                <Button disabled={fileLoading || formLoading} className=" hover:bg-primary-600" type="submit">
+                    {(fileLoading || formLoading) && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                     List Item
                 </Button>
             </div>
