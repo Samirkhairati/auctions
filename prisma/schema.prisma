@@ -77,6 +77,7 @@ model Item {
   bids        Bid[]
   user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   media       Media[]
+  winner      Winner[]
 
   @@map("items")
 }
@@ -102,4 +103,17 @@ model Bid {
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@map("bids")
+}
+
+model Winner {
+  id        String   @id @default(cuid())
+  itemId    String?
+  userId    String?
+  token     String?
+  claimed   Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  item      Item?    @relation(fields: [itemId], references: [id], onDelete: Cascade)
+
+  @@map("winner")
 }

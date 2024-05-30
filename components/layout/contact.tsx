@@ -11,6 +11,17 @@ import axios from "axios";
 import { toast } from "react-hot-toast";
 import { Loader2 } from "lucide-react";
 import session from "@/lib/session";
+import { IoQrCode } from "react-icons/io5";
+import { path } from "@/lib/utils";
+import { QRCodeSVG } from 'qrcode.react';
+import { FaHandHoldingHeart } from "react-icons/fa";
+import {
+    Dialog,
+    DialogContent,
+    DialogTrigger,
+} from "@/components/ui/dialog"
+import { QrReader } from 'react-qr-reader';
+
 
 interface OptionsProps {
     chat: string,
@@ -28,6 +39,10 @@ export default function Contact({ chat, details, buyer, seller, active }: Option
     const [bid, setBid] = useState<string>("")
     const [loading, setLoading] = useState<boolean>(false)
     const [closing, setClosing] = useState<boolean>(false)
+    const [generating, setGenerating] = useState<boolean>(false)
+    const [qr, setQr] = useState<string>("")
+    const [claim, setClaim] = useState<string>('');
+
 
     const handleBid = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
@@ -74,6 +89,19 @@ export default function Contact({ chat, details, buyer, seller, active }: Option
             });
     }
 
+    const handleGenerate = async () => {
+        setGenerating(true)
+        axios.post(`/api/items/${details}/generate`, { itemId: details })
+            .then(function (response) {
+                setQr(response.data.token)
+                setGenerating(false)
+            })
+            .catch(function (error) {
+                toast.error(JSON.stringify(error))
+                setGenerating(false)
+            });
+    }
+
     return (
         <>
             <div className="flex items-center gap-4 flex-wrap">
@@ -83,12 +111,55 @@ export default function Contact({ chat, details, buyer, seller, active }: Option
                         Chat with Seller
                     </Button>
                 </Link>}
+
+
                 {(buyer === seller) && (active) && <Button disabled={closing} onClick={handleClose} className="" variant="destructive">
                     {closing && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                     <FaHandshake className="mr-2" />
                     Close Deal
                 </Button>}
-                {(buyer !== seller) && <div className="flex items-center gap-2">
+                <Dialog>
+                    <DialogTrigger asChild>
+                        {(buyer === seller) && (!active) && <Button disabled={generating} onClick={handleGenerate} className="bg-emerald-600">
+                            {generating && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                            <IoQrCode className="mr-2" />
+                            Generate QR
+                        </Button>}
+                    </DialogTrigger>
+                    {!generating &&
+                        <DialogContent className="w-auto">
+                            <QRCodeSVG value={qr} />
+                        </DialogContent>
+                    }
+                </Dialog>
+
+                <Dialog>
+                    <DialogTrigger asChild>
+                        {(buyer !== seller) && (!active) && <Button className="bg-emerald-600">
+                            <FaHandHoldingHeart className="mr-2" />
+                            Claim Item
+                        </Button>}
+                    </DialogTrigger>
+                    {!generating &&
+                        <DialogContent className="w-72 md:w-96">
+                            <QrReader
+                                onResult={(result, error) => {
+                                    if (!!result) {
+                                        //@ts-ignore
+                                        setClaim(result?.text);
+                                    }
+                                    if (!!error) {
+                                        console.info(error);
+                                    }
+                                }}
+                                //@ts-ignore
+                                style={{ width: '100%' }}
+                            />
+                        </DialogContent>
+                    }
+                </Dialog>
+
+                {(buyer !== seller) && (active) && <div className="flex items-center gap-2">
                     <form className="flex flex-wrap gap-2" onSubmit={handleBid}>
                         <Button disabled={loading} type="submit">
                             {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
@@ -102,3 +173,4 @@ export default function Contact({ chat, details, buyer, seller, active }: Option
         </>
     );
 }
+

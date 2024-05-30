@@ -48,7 +48,12 @@ export async function PUT(request: Request, { params }: { params: { id: string }
             id: params.id
         },
         include: {
-            user: true
+            user: true,
+            bids: {
+                include: {
+                    user: true,
+                },
+            },
         }
     })
     // auth
@@ -56,6 +61,7 @@ export async function PUT(request: Request, { params }: { params: { id: string }
     if (!user) return Response.redirect("/api/auth/signin?next=/buy/" + params.id)
     if (user.id !== item?.user?.id) return Response.json({ error: "You are not the owner of this item" })
     if (!item?.active) return Response.json({ error: "Item is already closed" })
+    if (item.bids.length === 0) return Response.json({ error: "No bids on this item" })
 
     const updatedItem = await prisma.item.update({
         where: {
@@ -63,7 +69,13 @@ export async function PUT(request: Request, { params }: { params: { id: string }
         },
         data: {
             active: false,
-            endedAt: new Date()
+            endedAt: new Date(),
+            winner: {
+                create: {
+                    userId: item.bids[item.bids.length - 1].userId,
+                    token: Math.random().toString(36).substring(3),
+                },
+            }
         },
         include: {
             bids: {
@@ -71,7 +83,10 @@ export async function PUT(request: Request, { params }: { params: { id: string }
                     user: true,
                 },
             },
+            winner: true
         },
     })
+
+
     return Response.json(updatedItem)
 }
