@@ -77,7 +77,7 @@ export default function Component({ item }: { item: Item }) {
             </Avatar>
             <div className="font-medium text-sm">{item?.user.name}</div>
           </div>
-          <Options />
+          <Options chat={'hi'} details={item.id} />
         </div>
       </div>
     </div>

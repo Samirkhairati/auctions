@@ -3,16 +3,24 @@ import { TbListDetails } from "react-icons/tb";
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 
-export default function Options() {
+interface OptionsProps {
+    chat: string,
+    details: string
+}
+
+export default function Options({ chat, details }: OptionsProps) {
+
+    //TODO: implement chat button
+
     return (
         <>
-            <Link href="/chat">
+            <Link prefetch={true} href="/chat">
                 <Button className="flex items-center" size="sm" variant="outline">
                     <IoChatboxOutline className="mr-2" />
                     Chat
                 </Button>
             </Link>
-            <Link href="/details">
+            <Link prefetch={true} href={`/buy/${details}`}>
                 <Button size="sm" variant="outline">
                     <TbListDetails className="mr-2" />
                     Details
