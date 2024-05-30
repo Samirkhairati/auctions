@@ -16,10 +16,11 @@ interface OptionsProps {
     chat: string,
     details: string,
     buyer: string | undefined,
-    seller: string | undefined
+    seller: string | undefined,
+    active: boolean
 }
 
-export default function Contact({ chat, details, buyer, seller }: OptionsProps) {
+export default function Contact({ chat, details, buyer, seller, active }: OptionsProps) {
 
     //TODO: implement chat button
 
@@ -82,7 +83,8 @@ export default function Contact({ chat, details, buyer, seller }: OptionsProps) 
                         Chat with Seller
                     </Button>
                 </Link>}
-                {(buyer === seller) && <Button onClick={handleClose} className="" variant="destructive">
+                {(buyer === seller) && (active) && <Button disabled={closing} onClick={handleClose} className="" variant="destructive">
+                    {closing && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                     <FaHandshake className="mr-2" />
                     Close Deal
                 </Button>}

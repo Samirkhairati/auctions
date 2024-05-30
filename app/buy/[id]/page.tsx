@@ -85,7 +85,7 @@ export default async function page({ params }: { params: { id: string } }) {
                     {item?.bids.length != 0 && <span className="text-gray-500 line-through">{item?.basePrice}</span>}
                 </div>
                 <div className={`${item?.active ? 'text-emerald-600' : 'text-rose-600'} text-sm`}>{item?.active ? "Closing on " : "Closed on "} {item?.endedAt?.toString().slice(0, 10)}</div>
-                <Contact seller={item.user.id} buyer={user?.id} chat={'h'} details={item?.id} />
+                <Contact active={item.active} seller={item.user.id} buyer={user?.id} chat={'h'} details={item?.id} />
                 <div className="border rounded-lg overflow-hidden">
                     <Table>
                         <TableHeader>
