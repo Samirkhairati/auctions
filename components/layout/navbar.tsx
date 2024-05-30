@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button"
 import { SheetTrigger, SheetContent, Sheet } from "@/components/ui/sheet"
-import {MenuIcon } from "@/components/layout/icons"
+import { MenuIcon } from "@/components/layout/icons"
 import SearchBar from "@/components/layout/navbar/search-bar"
 import UserMenu from "@/components/layout/navbar/user-menu"
 import ModeToggle from "@/components/layout/navbar/mode-toggle"
@@ -14,7 +14,7 @@ export default async function Navbar() {
     const user = (await session())?.user;
 
     return (
-        <header className="sticky top-0 flex h-16 items-center gap-4 border-b bg-background px-4 md:px-6">
+        <header className=" sticky z-50 w-full top-0 flex h-16 items-center gap-4 border-b bg-background px-4 md:px-6">
             <DesktopNavLinks />
             <Sheet>
                 <SheetTrigger asChild>
