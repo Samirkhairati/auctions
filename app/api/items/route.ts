@@ -19,7 +19,8 @@ export async function GET(request: Request) {
         include: {
             media: true,
             bids: true,
-            user: true
+            user: true,
+            winner: true,
         }
     })
     return Response.json(items)

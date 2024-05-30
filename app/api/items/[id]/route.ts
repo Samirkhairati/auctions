@@ -58,7 +58,8 @@ export async function GET(
                     user: true
                 }
             },
-            user: true
+            user: true,
+            winner: true
         }
     })
     return Response.json(item)

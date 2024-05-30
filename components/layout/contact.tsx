@@ -14,7 +14,7 @@ import session from "@/lib/session";
 import { IoQrCode } from "react-icons/io5";
 import { path } from "@/lib/utils";
 import { QRCodeSVG } from 'qrcode.react';
-import { FaHandHoldingHeart } from "react-icons/fa";
+import { FaCamera } from "react-icons/fa6";
 import {
     Dialog,
     DialogContent,
@@ -28,10 +28,11 @@ interface OptionsProps {
     details: string,
     buyer: string | undefined,
     seller: string | undefined,
-    active: boolean
+    active: boolean,
+    claimed: boolean
 }
 
-export default function Contact({ chat, details, buyer, seller, active }: OptionsProps) {
+export default function Contact({ chat, details, buyer, seller, active, claimed }: OptionsProps) {
 
     //TODO: implement chat button
 
@@ -42,6 +43,7 @@ export default function Contact({ chat, details, buyer, seller, active }: Option
     const [generating, setGenerating] = useState<boolean>(false)
     const [qr, setQr] = useState<string>("")
     const [claim, setClaim] = useState<string>('');
+    const [claiming, setClaiming] = useState<boolean>(false);
 
 
     const handleBid = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -102,6 +104,25 @@ export default function Contact({ chat, details, buyer, seller, active }: Option
             });
     }
 
+
+
+    useEffect(() => {
+        const handleClaim = async () => {
+            setClaiming(true)
+            axios.put(`/api/items/${details}/claim`, { token: claim })
+                .then(function (response) {
+                    setClaiming(false)
+                    toast.success("Item claimed successfully")
+                })
+                .catch(function (error) {
+                    toast.error("An error occurred")
+                    setClaiming(false)
+                });
+        }
+        handleClaim()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [claim])
+
     return (
         <>
             <div className="flex items-center gap-4 flex-wrap">
@@ -135,18 +156,20 @@ export default function Contact({ chat, details, buyer, seller, active }: Option
 
                 <Dialog>
                     <DialogTrigger asChild>
-                        {(buyer !== seller) && (!active) && <Button className="bg-emerald-600">
-                            <FaHandHoldingHeart className="mr-2" />
+                        {(buyer !== seller) && (!active) && (!claimed) && <Button disabled={claiming} className="bg-emerald-600">
+                            {claiming && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                            <FaCamera className="mr-2" />
                             Claim Item
                         </Button>}
                     </DialogTrigger>
-                    {!generating &&
+                    {!claiming &&
                         <DialogContent className="w-72 md:w-96">
                             <QrReader
                                 onResult={(result, error) => {
                                     if (!!result) {
                                         //@ts-ignore
                                         setClaim(result?.text);
+                                        throw new Error("Camera turned off")
                                     }
                                     if (!!error) {
                                         console.info(error);

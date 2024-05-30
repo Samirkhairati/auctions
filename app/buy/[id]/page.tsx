@@ -20,6 +20,7 @@ interface Item {
     userId: string;
     user: User;
     media: Media[];
+    winner: Winner
     bids: Bid[];
     createdAt: Date;
     updatedAt: Date;
@@ -44,10 +45,24 @@ interface Bid {
     user: User;
 }
 
+interface Winner {
+    id: string;
+    claimed: boolean;
+    itemId: string;
+    userId: string;
+    createdAt: Date;
+    updatedAt: Date;
+    item: Item;
+    user: User;
+}
+
 export default async function page({ params }: { params: { id: string } }) {
     const res = await fetch(path + '/api/items/' + params.id, { cache: 'no-store' })
     const user = (await session())?.user;
     const item: Item = await res.json()
+    //@ts-ignore
+    const winner = item?.winner[0]
+    console.log(item)
 
     return (
         <div key="1" className="grid md:grid-cols-2 gap-6 lg:gap-12 items-start max-w-6xl px-4 mx-auto py-6">
@@ -85,7 +100,10 @@ export default async function page({ params }: { params: { id: string } }) {
                     {item?.bids.length != 0 && <span className="text-gray-500 line-through">{item?.basePrice}</span>}
                 </div>
                 <div className={`${item?.active ? 'text-emerald-600' : 'text-rose-600'} text-sm`}>{item?.active ? "Closing on " : "Closed on "} {item?.endedAt?.toString().slice(0, 10)}</div>
-                <Contact active={item.active} seller={item.user.id} buyer={user?.id} chat={'h'} details={item?.id} />
+                {winner.claimed && <p className="text-lg font-bold">🎉 Item has been claimed</p>}
+
+                <Contact claimed={winner.claimed} active={item.active} seller={item.user.id} buyer={user?.id} chat={'h'} details={item?.id} />
+
                 <div className="border rounded-lg overflow-hidden">
                     <Table>
                         <TableHeader>
@@ -123,7 +141,7 @@ export default async function page({ params }: { params: { id: string } }) {
                                     </div>
                                 </TableCell>
                                 <TableCell>₹{item?.basePrice}</TableCell>
-                                <TableCell>{item?.createdAt.toString().slice(0, 10)} ~ {item?.createdAt.toString().slice(11,16)}</TableCell>
+                                <TableCell>{item?.createdAt.toString().slice(0, 10)} ~ {item?.createdAt.toString().slice(11, 16)}</TableCell>
                             </TableRow>
                         </TableBody>
                     </Table>
