@@ -29,7 +29,7 @@ export default function Contact({ chat, details }: OptionsProps) {
         data.append('amount', bid)
         data.append('itemId', details)
         setLoading(true)
-        axios.put(`/api/items/${details}`, { amount: bid, itemId: details})
+        axios.put(`/api/items/${details}`, { amount: bid, itemId: details })
             .then(function (response) {
                 if (response.data.error) {
                     toast.error(response.data.error)
@@ -57,6 +57,10 @@ export default function Contact({ chat, details }: OptionsProps) {
                         Chat with Seller
                     </Button>
                 </Link>
+                <Button className="w-full">
+                    <IoChatboxOutline className="mr-2" />
+                    Chat with Seller
+                </Button>
                 <div className="flex items-center gap-2">
                     <form className="flex flex-wrap gap-2" onSubmit={handleBid}>
                         <Button disabled={loading} type="submit">

@@ -53,7 +53,11 @@ export async function GET(
         },
         include: {
             media: true,
-            bids: true,
+            bids: {
+                include: {
+                    user: true
+                }
+            },
             user: true
         }
     })
@@ -61,21 +65,19 @@ export async function GET(
 }
 
 export async function PUT(request: Request, { params }: { params: { id: string } }) {
-    console.log('✅✅✅✅✅✅')
     const body: PutProps = await request.json()
-    console.log('✅✅✅✅✅✅', body)
     // auth
     const user = (await session())?.user;
     if (!user) return Response.redirect("/api/auth/signin?next=/buy/" + params.id)
 
     //check for amount
-    if (!body.amount) return Response.json({error: "Enter a valid amount"})
+    if (!body.amount) return Response.json({ error: "Enter a valid amount" })
     let amount = 0
     try { amount = Number(body.amount) }
-    catch (error) { return Response.json({error: "Enter a valid amount"}) }
+    catch (error) { return Response.json({ error: "Enter a valid amount" }) }
 
     //validate amount
-    if (amount < 0) return Response.json({error: "Enter a valid amount"})
+    if (amount < 0) return Response.json({ error: "Enter a valid amount" })
     const item = await prisma.item.findUnique({
         where: {
             id: body.itemId
@@ -84,11 +86,14 @@ export async function PUT(request: Request, { params }: { params: { id: string }
             bids: true,
         }
     })
+
+    if (!item?.active) return Response.json({ error: "Bidding period has closed" })
+
     //@ts-ignore
-    if (item?.bids.length === 0 && amount <= item.basePrice) return Response.json({error: "Your bid needs to be more than the base price!"})
-    if (item?.bids.length!=0) {
+    if (item?.bids.length === 0 && amount <= item.basePrice) return Response.json({ error: "Your bid needs to be more than the base price!" })
+    if (item?.bids.length != 0) {
         //@ts-ignore
-        if (amount <= item.bids[item.bids.length - 1].amount) return Response.json({error: "Your bid needs to be more than the highest bid!"})
+        if (amount <= item.bids[item.bids.length - 1].amount) return Response.json({ error: "Your bid needs to be more than the highest bid!" })
     }
 
     const updatedItem = await prisma.item.update({
@@ -103,7 +108,15 @@ export async function PUT(request: Request, { params }: { params: { id: string }
                     userId: user.id,
                 }
             }
-        }
+        },
+        include: {
+            bids: {
+                include: {
+                    user: true,
+                },
+            },
+        },
     })
+    console.log(updatedItem)
     return Response.json(updatedItem)
 }

@@ -46,7 +46,7 @@ interface Bid {
 export default async function page({ params }: { params: { id: string } }) {
     const res = await fetch(path + '/api/items/' + params.id, { cache: 'no-store' })
     const item: Item = await res.json()
-    console.log(item);
+
     return (
         <div key="1" className="grid md:grid-cols-2 gap-6 lg:gap-12 items-start max-w-6xl px-4 mx-auto py-6">
             <div>
@@ -97,14 +97,29 @@ export default async function page({ params }: { params: { id: string } }) {
                             {item?.bids?.slice().reverse().map((bid, index) => {
                                 return (
                                     <TableRow key={index}>
-                                        <TableCell>{bid.user.name}</TableCell>
+                                        <TableCell>
+                                            <div className="flex items-center gap-4">
+                                                <Avatar className="w-4 h-4">
+                                                    <AvatarImage alt="Seller Avatar" src={bid.user.image || "/placeholder-user.jpg"} />
+                                                </Avatar>
+                                                <span className="font-medium">{bid.user.name || "Full Name"}</span>
+                                            </div>
+                                        </TableCell>
                                         <TableCell>₹{bid.amount}</TableCell>
                                         <TableCell>{bid.createdAt.toString().slice(0, 10)}</TableCell>
                                     </TableRow>
                                 )
                             })}
                             <TableRow>
-                                <TableCell>{item?.user.name}</TableCell>
+                                <TableCell>
+                                    <div className="flex items-center gap-4">
+                                        <Avatar className="w-4 h-4">
+                                            <AvatarImage alt="Seller Avatar" src={item?.user.image || "/placeholder-user.jpg"} />
+                                            <AvatarFallback>JS</AvatarFallback>
+                                        </Avatar>
+                                        <span className="font-medium">{item?.user.name || "Full Name"}</span>
+                                    </div>
+                                </TableCell>
                                 <TableCell>₹{item?.basePrice}</TableCell>
                                 <TableCell>{item?.createdAt.toString().slice(0, 10)}</TableCell>
                             </TableRow>
