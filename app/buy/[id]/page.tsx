@@ -8,6 +8,7 @@ import Image from "next/image"
 import { ChevronLeftIcon, ChevronRightIcon } from "@/components/layout/icons"
 import { AvatarImage, AvatarFallback, Avatar } from "@/components/ui/avatar"
 import Contact from "@/components/layout/contact"
+import session from "@/lib/session"
 
 interface Item {
     id: string;
@@ -45,6 +46,7 @@ interface Bid {
 
 export default async function page({ params }: { params: { id: string } }) {
     const res = await fetch(path + '/api/items/' + params.id, { cache: 'no-store' })
+    const user = (await session())?.user;
     const item: Item = await res.json()
 
     return (
@@ -83,7 +85,7 @@ export default async function page({ params }: { params: { id: string } }) {
                     {item?.bids.length != 0 && <span className="text-gray-500 line-through">{item?.basePrice}</span>}
                 </div>
                 <div className={`${item?.active ? 'text-emerald-600' : 'text-rose-600'} text-sm`}>{item?.active ? "Closing on " : "Closed on "} {item?.endedAt?.toString().slice(0, 10)}</div>
-                <Contact chat={'h'} details={item?.id} />
+                <Contact seller={item.user.id} buyer={user?.id} chat={'h'} details={item?.id} />
                 <div className="border rounded-lg overflow-hidden">
                     <Table>
                         <TableHeader>
@@ -106,7 +108,7 @@ export default async function page({ params }: { params: { id: string } }) {
                                             </div>
                                         </TableCell>
                                         <TableCell>₹{bid.amount}</TableCell>
-                                        <TableCell>{bid.createdAt.toString().slice(0, 10)}</TableCell>
+                                        <TableCell>{bid.createdAt.toString().slice(0, 10)} ~ {bid.createdAt.toString().slice(11, 16)}</TableCell>
                                     </TableRow>
                                 )
                             })}
@@ -114,14 +116,14 @@ export default async function page({ params }: { params: { id: string } }) {
                                 <TableCell>
                                     <div className="flex items-center gap-4">
                                         <Avatar className="w-4 h-4">
-                                            <AvatarImage alt="Seller Avatar" src={item?.user.image || "/placeholder-user.jpg"} />
+                                            <AvatarImage alt="Seller Avatar" src={item?.user?.image || "/placeholder-user.jpg"} />
                                             <AvatarFallback>JS</AvatarFallback>
                                         </Avatar>
                                         <span className="font-medium">{item?.user.name || "Full Name"}</span>
                                     </div>
                                 </TableCell>
                                 <TableCell>₹{item?.basePrice}</TableCell>
-                                <TableCell>{item?.createdAt.toString().slice(0, 10)}</TableCell>
+                                <TableCell>{item?.createdAt.toString().slice(0, 10)} ~ {item?.createdAt.toString().slice(11,16)}</TableCell>
                             </TableRow>
                         </TableBody>
                     </Table>
