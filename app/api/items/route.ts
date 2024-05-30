@@ -14,6 +14,17 @@ interface UploadedFile {
     secure_url: string;
 }
 
+export async function GET(request: Request) {
+    const items = await prisma.item.findMany({
+        include: {
+            media: true,
+            bids: true,
+            user: true
+        }
+    })
+    return Response.json(items)
+}
+
 export async function POST(request: Request) {
     const body: ItemFormData = await request.json()
     const user = (await session())?.user;
@@ -39,6 +50,4 @@ export async function POST(request: Request) {
         },
     });
     return Response.json(newItem)
-
-
 }

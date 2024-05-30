@@ -1,10 +1,10 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
-}
-
-generator client {
-  provider = "prisma-client-js"
 }
 
 model User {
@@ -13,14 +13,13 @@ model User {
   email         String    @unique
   emailVerified DateTime?
   image         String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
   role          String?
   accounts      Account[]
-  sessions      Session[]
-  items         Item[]
   bids          Bid[]
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  items         Item[]
+  sessions      Session[]
 
   @@map("users")
 }
@@ -37,11 +36,9 @@ model Account {
   scope             String?
   id_token          String?
   session_state     String?
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+  user              User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@id([provider, providerAccountId])
   @@map("accounts")
@@ -51,10 +48,9 @@ model Session {
   sessionToken String   @unique
   userId       String
   expires      DateTime
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
 
   @@map("sessions")
 }
@@ -69,19 +65,18 @@ model VerificationToken {
 }
 
 model Item {
-  id          String  @id @default(cuid())
+  id          String    @id @default(cuid())
   name        String?
   description String?
   basePrice   Float?
-  active      Boolean @default(true)
+  active      Boolean   @default(true)
   endedAt     DateTime?
   userId      String
-  user        User    @relation(fields: [userId], references: [id], onDelete: Cascade)
-  media       Media[]
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
   bids        Bid[]
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  media       Media[]
 
   @@map("items")
 }
@@ -97,15 +92,14 @@ model Media {
 }
 
 model Bid {
-  id        String  @id @default(cuid())
+  id        String   @id @default(cuid())
   amount    Float
   itemId    String
   userId    String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-
-  item Item @relation(fields: [itemId], references: [id], onDelete: Cascade)
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  item      Item     @relation(fields: [itemId], references: [id], onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@map("bids")
 }

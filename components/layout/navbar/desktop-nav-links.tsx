@@ -17,7 +17,7 @@ function DesktopNavLinks() {
 }
 function NavbarLink({ children, href }: { children: React.ReactNode, href: string }) {
     return (
-        <Link className="text-muted-foreground transition-colors hover:text-foreground" href={href}>
+        <Link prefetch={true} className="text-muted-foreground transition-colors hover:text-foreground" href={href}>
             {children}
         </Link>
     )
