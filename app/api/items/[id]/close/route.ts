@@ -2,6 +2,8 @@
 import prisma from '@/lib/prisma';
 import session from '@/lib/session';
 import { User } from 'next-auth';
+import { pusherServer } from '@/lib/pusher';
+
 
 interface Item {
     id: string;
@@ -62,6 +64,8 @@ export async function PUT(request: Request, { params }: { params: { id: string }
     if (user.id !== item?.user?.id) return Response.json({ error: "You are not the owner of this item" })
     if (!item?.active) return Response.json({ error: "Item is already closed" })
     if (item.bids.length === 0) return Response.json({ error: "No bids on this item" })
+
+    pusherServer.trigger(params.id, 'close', "")
 
     const updatedItem = await prisma.item.update({
         where: {

@@ -6,6 +6,7 @@ import { AvatarImage, AvatarFallback, Avatar } from "@/components/ui/avatar"
 import { User } from "next-auth"
 import { useEffect, useState } from "react";
 import { pusherClient } from "@/lib/pusher";
+import { useRouter } from 'next/navigation'
 
 
 interface EventProps {
@@ -16,6 +17,7 @@ interface EventProps {
 }
 
 export default function Bids({ id } : { id: string}) {
+    const router = useRouter()
 
     const [item, setItem] = useState<EventProps[]>([])
     useEffect(() => {
@@ -23,6 +25,17 @@ export default function Bids({ id } : { id: string}) {
         pusherClient.bind('bids', function (data: EventProps) {
             setItem((prev) => [...prev, data])
         })
+        pusherClient.bind('close', function (data: any) {
+            alert("Bidding has been closed")
+            window.location.reload()
+        })
+        pusherClient.bind('claim', function (data: any) {
+            alert("Item has been claimed")
+            window.location.reload()
+        })
+        return () => {
+            pusherClient.unsubscribe(id)
+        }
     }, [])
 
 

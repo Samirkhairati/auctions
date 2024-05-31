@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 "use client"
 import { FaHandshake } from "react-icons/fa6";
 import { FaHandHoldingUsd } from "react-icons/fa";
@@ -20,8 +21,7 @@ import {
     DialogContent,
     DialogTrigger,
 } from "@/components/ui/dialog"
-import { QrReader } from 'react-qr-reader';
-
+import { Scanner } from '@yudiel/react-qr-scanner';
 
 interface OptionsProps {
     chat: string,
@@ -42,7 +42,7 @@ export default function Contact({ chat, details, buyer, seller, active, claimed 
     const [closing, setClosing] = useState<boolean>(false)
     const [generating, setGenerating] = useState<boolean>(false)
     const [qr, setQr] = useState<string>("")
-    const [claim, setClaim] = useState<string>('');
+    const [claim, setClaim] = useState<any>();
     const [claiming, setClaiming] = useState<boolean>(false);
 
 
@@ -105,23 +105,29 @@ export default function Contact({ chat, details, buyer, seller, active, claimed 
     }
 
 
+    const handleClaim = async (token: string) => {
+        setClaiming(true)
+        await axios.put(`/api/items/${details}/claim`, { token: token })
+            .then(function (response) {
+                setClaiming(false)
+                if (response.data.error) {
+                    toast.error(response.data.error)
+                    window.location.reload()
+                } else {
+                    toast.success("Item claimed successfully")
+                    window.location.reload()
+                }
+            })
+            .catch(function (error: any) {
+                toast.error("An error occurred: " + JSON.stringify(error))
+                setClaiming(false)
+            });
+    }
 
     useEffect(() => {
-        const handleClaim = async () => {
-            setClaiming(true)
-            await axios.put(`/api/items/${details}/claim`, { token: claim })
-                .then(function (response) {
-                    setClaiming(false)
-                    toast.success("Item claimed successfully")
-                })
-                .catch(function (error) {
-                    toast.error("An error occurred")
-                    setClaiming(false)
-                });
-        }
-        handleClaim()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        if (claim) handleClaim(claim[0].rawValue)
     }, [claim])
+
 
     return (
         <>
@@ -163,21 +169,8 @@ export default function Contact({ chat, details, buyer, seller, active, claimed 
                         </Button>}
                     </DialogTrigger>
                     {!claiming &&
-                        <DialogContent className="w-72 md:w-96">
-                            <QrReader
-                                onResult={(result, error) => {
-                                    if (!!result) {
-                                        //@ts-ignore
-                                        setClaim(result?.text);
-                                        throw new Error("Camera turned off")
-                                    }
-                                    if (!!error) {
-                                        console.info(error);
-                                    }
-                                }}
-                                //@ts-ignore
-                                style={{ width: '100%' }}
-                            />
+                        <DialogContent className="h-80">
+                            <Scanner paused={false} onScan={(result: any) => setClaim(result)} />
                         </DialogContent>
                     }
                 </Dialog>

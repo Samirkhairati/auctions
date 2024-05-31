@@ -2,6 +2,8 @@
 import prisma from '@/lib/prisma';
 import session from '@/lib/session';
 import { User } from 'next-auth';
+import { pusherServer } from '@/lib/pusher';
+
 
 interface Item {
     id: string;
@@ -52,6 +54,7 @@ export async function PUT(request: Request, { params }: { params: { id: string }
     })
     if (user.id !== winner?.userId) return Response.json({ error: "You are not the winner of this item" })
     if (token === winner?.token) {
+        pusherServer.trigger(params.id, 'claim', "")
         const updatedWinner = await prisma.winner.update({
             where: {
                 id: winner?.id
@@ -62,6 +65,6 @@ export async function PUT(request: Request, { params }: { params: { id: string }
         })
         return Response.json(updatedWinner)
     } else {
-        return Response.json({ error: "Invalid token" })
+        return Response.json({ error: "Invalid QR Code" })
     }
 }
