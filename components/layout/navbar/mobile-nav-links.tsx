@@ -13,7 +13,6 @@ function MobileNavLinks() {
             <MobileNavbarLink href="/">Buy</MobileNavbarLink>
             <MobileNavbarLink href="/sell">Sell</MobileNavbarLink>
             <MobileNavbarLink href="/chat">Chat</MobileNavbarLink>
-            <MobileNavbarLink href="/settings">Settings</MobileNavbarLink>
         </nav>
     )
 }

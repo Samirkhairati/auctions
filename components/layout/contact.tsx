@@ -22,6 +22,7 @@ import {
     DialogTrigger,
 } from "@/components/ui/dialog"
 import { Scanner } from '@yudiel/react-qr-scanner';
+import { useRouter } from "next/navigation";
 
 interface OptionsProps {
     chat: string,
@@ -34,8 +35,7 @@ interface OptionsProps {
 
 export default function Contact({ chat, details, buyer, seller, active, claimed }: OptionsProps) {
 
-    //TODO: implement chat button
-
+    const router = useRouter()
 
     const [bid, setBid] = useState<string>("")
     const [loading, setLoading] = useState<boolean>(false)
@@ -104,7 +104,6 @@ export default function Contact({ chat, details, buyer, seller, active, claimed 
             });
     }
 
-
     const handleClaim = async (token: string) => {
         setClaiming(true)
         await axios.put(`/api/items/${details}/claim`, { token: token })
@@ -124,6 +123,21 @@ export default function Contact({ chat, details, buyer, seller, active, claimed 
             });
     }
 
+    const handleChat = async () => {
+        await axios.post(`/api/rooms`, { userId1: buyer, userId2: seller })
+            .then(function (response) {
+                if (response.data.error) {
+                    toast.error(response.data.error)
+                    return
+                } else {
+                    router.push(`/chat/${response.data.id}`)
+                }
+            })
+            .catch(function (error) {
+                toast.error("An error occured")
+            });
+    }
+
     useEffect(() => {
         if (claim) handleClaim(claim[0].rawValue)
     }, [claim])
@@ -132,26 +146,28 @@ export default function Contact({ chat, details, buyer, seller, active, claimed 
     return (
         <>
             <div className="flex items-center gap-4 flex-wrap">
-                {(buyer !== seller) && <Link prefetch={true} href="/chat">
-                    <Button className="w-full">
+                {(buyer !== seller) &&
+                    <Button onClick={handleChat} className="w-full">
                         <IoChatboxOutline className="mr-2" />
                         Chat with Seller
                     </Button>
-                </Link>}
+                }
 
 
-                {(buyer === seller) && (active) && <Button disabled={closing} onClick={handleClose} className="" variant="destructive">
-                    {closing && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                    <FaHandshake className="mr-2" />
-                    Close Deal
-                </Button>}
+                {(buyer === seller) && (active) &&
+                    <Button disabled={closing} onClick={handleClose} className="" variant="destructive">
+                        {closing && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                        <FaHandshake className="mr-2" />
+                        Close Deal
+                    </Button>}
                 <Dialog>
                     <DialogTrigger asChild>
-                        {(buyer === seller) && (!active) && <Button disabled={generating} onClick={handleGenerate} className="bg-emerald-600">
-                            {generating && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                            <IoQrCode className="mr-2" />
-                            Generate QR
-                        </Button>}
+                        {(buyer === seller) && (!active) &&
+                            <Button disabled={generating} onClick={handleGenerate} className="bg-emerald-600">
+                                {generating && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                                <IoQrCode className="mr-2" />
+                                Generate QR
+                            </Button>}
                     </DialogTrigger>
                     {!generating &&
                         <DialogContent className="w-auto">
@@ -162,11 +178,12 @@ export default function Contact({ chat, details, buyer, seller, active, claimed 
 
                 <Dialog>
                     <DialogTrigger asChild>
-                        {(buyer !== seller) && (!active) && (!claimed) && <Button disabled={claiming} className="bg-emerald-600">
-                            {claiming && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                            <FaCamera className="mr-2" />
-                            Claim Item
-                        </Button>}
+                        {(buyer !== seller) && (!active) && (!claimed) &&
+                            <Button disabled={claiming} className="bg-emerald-600">
+                                {claiming && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                                <FaCamera className="mr-2" />
+                                Claim Item
+                            </Button>}
                     </DialogTrigger>
                     {!claiming &&
                         <DialogContent className="h-80">
@@ -175,16 +192,18 @@ export default function Contact({ chat, details, buyer, seller, active, claimed 
                     }
                 </Dialog>
 
-                {(buyer !== seller) && (active) && <div className="flex items-center gap-2">
-                    <form className="flex flex-wrap gap-2" onSubmit={handleBid}>
-                        <Button disabled={loading} type="submit">
-                            {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                            <FaHandHoldingUsd className="mr-2" />
-                            Place Bid
-                        </Button>
-                        <Input onChange={(e) => setBid(e.target.value)} className="w-24" type="number" />
-                    </form>
-                </div>}
+                {(buyer !== seller) && (active) &&
+                    <div className="flex items-center gap-2">
+                        <form className="flex flex-wrap gap-2" onSubmit={handleBid}>
+                            <Button disabled={loading} type="submit">
+                                {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                                <FaHandHoldingUsd className="mr-2" />
+                                Place Bid
+                            </Button>
+                            <Input onChange={(e) => setBid(e.target.value)} className="w-24" type="number" />
+                        </form>
+                    </div>
+                }
             </div>
         </>
     );

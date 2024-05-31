@@ -11,7 +11,6 @@ function DesktopNavLinks() {
             <NavbarLink href="/">Buy</NavbarLink>
             <NavbarLink href="/sell">Sell</NavbarLink>
             <NavbarLink href="/chat">Chat</NavbarLink>
-            <NavbarLink href="/settings">Settings</NavbarLink>
         </nav>
     )
 }
