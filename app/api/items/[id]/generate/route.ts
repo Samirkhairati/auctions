@@ -10,6 +10,5 @@ export async function POST(request: Request) {
             itemId: body.itemId
         }
     })
-    console.log(winner)
     return Response.json({token: winner?.token})
 }

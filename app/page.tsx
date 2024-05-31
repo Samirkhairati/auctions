@@ -40,7 +40,6 @@ interface Bid {
 export default async function Home() {
 
   const items: Item[] = await (await fetch(path + '/api/items', {cache: 'no-store'})).json();
-  console.log(items);
 
   return (
     <>
