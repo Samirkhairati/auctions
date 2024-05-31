@@ -2,6 +2,7 @@
 import prisma from '@/lib/prisma';
 import session from '@/lib/session';
 import { User } from 'next-auth';
+import { pusherServer } from '@/lib/pusher';
 
 interface Item {
     id: string;
@@ -40,6 +41,13 @@ interface Bid {
 interface PutProps {
     itemId: string;
     amount: string;
+}
+
+interface EventProps {
+    image: string;
+    name: string;
+    amount: number;
+    createdAt: Date;
 }
 
 export async function GET(
@@ -96,6 +104,15 @@ export async function PUT(request: Request, { params }: { params: { id: string }
         //@ts-ignore
         if (amount <= item.bids[item.bids.length - 1].amount) return Response.json({ error: "Your bid needs to be more than the highest bid!" })
     }
+
+
+    const data: EventProps = {
+        image: user.image as string,
+        name: user.name as string,
+        amount: amount,
+        createdAt: new Date(),
+    }
+    pusherServer.trigger('global', 'bids', data)
 
     const updatedItem = await prisma.item.update({
         where: {
