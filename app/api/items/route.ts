@@ -15,15 +15,19 @@ interface UploadedFile {
 }
 
 export async function GET(request: Request) {
-    const items = await prisma.item.findMany({
-        include: {
-            media: true,
-            bids: true,
-            user: true,
-            winner: true,
-        }
-    })
-    return Response.json(items)
+    try {
+        const items = await prisma.item.findMany({
+            include: {
+                media: true,
+                bids: true,
+                user: true,
+                winner: true,
+            }
+        })
+        return Response.json(items)
+    } catch (error) {
+        return Response.json({})
+    }
 }
 
 export async function POST(request: Request) {
