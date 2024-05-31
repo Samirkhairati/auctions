@@ -52,7 +52,7 @@ export default function Contact({ chat, details, buyer, seller, active, claimed 
         data.append('amount', bid)
         data.append('itemId', details)
         setLoading(true)
-        axios.put(`/api/items/${details}`, { amount: bid, itemId: details })
+        await axios.put(`/api/items/${details}`, { amount: bid, itemId: details })
             .then(function (response) {
                 if (response.data.error) {
                     toast.error(response.data.error)
@@ -73,7 +73,7 @@ export default function Contact({ chat, details, buyer, seller, active, claimed 
 
     const handleClose = async () => {
         setClosing(true)
-        axios.put(`/api/items/${details}/close`)
+        await axios.put(`/api/items/${details}/close`)
             .then(function (response) {
                 if (response.data.error) {
                     toast.error(response.data.error)
@@ -93,7 +93,7 @@ export default function Contact({ chat, details, buyer, seller, active, claimed 
 
     const handleGenerate = async () => {
         setGenerating(true)
-        axios.post(`/api/items/${details}/generate`, { itemId: details })
+        await axios.post(`/api/items/${details}/generate`, { itemId: details })
             .then(function (response) {
                 setQr(response.data.token)
                 setGenerating(false)
@@ -109,7 +109,7 @@ export default function Contact({ chat, details, buyer, seller, active, claimed 
     useEffect(() => {
         const handleClaim = async () => {
             setClaiming(true)
-            axios.put(`/api/items/${details}/claim`, { token: claim })
+            await axios.put(`/api/items/${details}/claim`, { token: claim })
                 .then(function (response) {
                     setClaiming(false)
                     toast.success("Item claimed successfully")

@@ -62,7 +62,7 @@ function ItemForm() {
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
         setFormLoading(true)
-        axios.post('/api/items', {
+        await axios.post('/api/items', {
             name,
             description,
             price,
