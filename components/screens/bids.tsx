@@ -7,51 +7,6 @@ import { User } from "next-auth"
 import { useEffect, useState } from "react";
 import { pusherClient } from "@/lib/pusher";
 
-interface Item {
-    id: string;
-    name?: string;
-    description?: string;
-    basePrice?: number;
-    active: boolean;
-    endedAt?: Date;
-    userId: string;
-    user: User;
-    media: Media[];
-    winner: Winner
-    bids: Bid[];
-    createdAt: Date;
-    updatedAt: Date;
-}
-
-interface Media {
-    id: string;
-    resource_type: string;
-    secure_url: string;
-    itemId: string;
-    item: Item;
-}
-
-interface Bid {
-    id: string;
-    amount: number;
-    itemId: string;
-    userId: string;
-    createdAt: Date;
-    updatedAt: Date;
-    item: Item;
-    user: User;
-}
-
-interface Winner {
-    id: string;
-    claimed: boolean;
-    itemId: string;
-    userId: string;
-    createdAt: Date;
-    updatedAt: Date;
-    item: Item;
-    user: User;
-}
 
 interface EventProps {
     image: string;
@@ -60,60 +15,36 @@ interface EventProps {
     createdAt: Date;
 }
 
-export default function Bids({ initialItem, id }: { initialItem: Item }) {
+export default function Bids({ id } : { id: string}) {
 
-    const [item, setItem] = useState<Item>(initialItem)
+    const [item, setItem] = useState<EventProps[]>([])
     useEffect(() => {
-        pusherClient.subscribe('global')
+        pusherClient.subscribe(id)
         pusherClient.bind('bids', function (data: EventProps) {
-            alert(data)
+            setItem((prev) => [...prev, data])
         })
     }, [])
 
 
     return (
-        <div className="border rounded-lg overflow-hidden">
-            <Table>
-                <TableHeader>
-                    <TableRow>
-                        <TableHead>User</TableHead>
-                        <TableHead>Bid</TableHead>
-                        <TableHead>Date/Time</TableHead>
-                    </TableRow>
-                </TableHeader>
-                <TableBody>
-                    {item?.bids?.slice().reverse().map((bid, index) => {
-                        return (
-                            <TableRow key={index}>
-                                <TableCell>
-                                    <div className="flex items-center gap-4">
-                                        <Avatar className="w-4 h-4">
-                                            <AvatarImage alt="Seller Avatar" src={bid.user.image || "/placeholder-user.jpg"} />
-                                        </Avatar>
-                                        <span className="font-medium">{bid.user.name || "Full Name"}</span>
-                                    </div>
-                                </TableCell>
-                                <TableCell>₹{bid.amount}</TableCell>
-                                <TableCell>{bid.createdAt.toString().slice(0, 10)} ~ {bid.createdAt.toString().slice(11, 16)}</TableCell>
-                            </TableRow>
-                        )
-                    })}
-                    <TableRow>
+        <>
+            {item?.map((bid, index) => {
+                return (
+                    <TableRow key={index}>
                         <TableCell>
                             <div className="flex items-center gap-4">
                                 <Avatar className="w-4 h-4">
-                                    <AvatarImage alt="Seller Avatar" src={item?.user?.image || "/placeholder-user.jpg"} />
-                                    <AvatarFallback>JS</AvatarFallback>
+                                    <AvatarImage alt="Seller Avatar" src={bid.image || "/placeholder-user.jpg"} />
                                 </Avatar>
-                                <span className="font-medium">{item?.user.name || "Full Name"}</span>
+                                <span className="font-medium">{bid.name || "Full Name"}</span>
                             </div>
                         </TableCell>
-                        <TableCell>₹{item?.basePrice}</TableCell>
-                        <TableCell>{item?.createdAt.toString().slice(0, 10)} ~ {item?.createdAt.toString().slice(11, 16)}</TableCell>
+                        <TableCell>₹{bid.amount}</TableCell>
+                        <TableCell>{bid.createdAt.toString().slice(0, 10)} ~ {bid.createdAt.toString().slice(11, 16)}</TableCell>
                     </TableRow>
-                </TableBody>
-            </Table>
-        </div>
+                )
+            })}
+        </>
     )
 }
 

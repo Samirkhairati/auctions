@@ -3,10 +3,11 @@ import { CarouselItem, CarouselContent, CarouselPrevious, CarouselNext, Carousel
 import { path } from '@/lib/utils'
 import Image from "next/image"
 import { ChevronLeftIcon, ChevronRightIcon } from "@/components/layout/icons"
-import { AvatarImage, AvatarFallback, Avatar } from "@/components/ui/avatar"
 import Contact from "@/components/layout/contact"
 import session from "@/lib/session"
 import Bids from "@/components/screens/bids"
+import { TableHead, TableRow, TableHeader, TableCell, TableBody, Table } from "@/components/ui/table"
+import { AvatarImage, AvatarFallback, Avatar } from "@/components/ui/avatar"
 
 interface Item {
     id: string;
@@ -101,7 +102,53 @@ export default async function page({ params }: { params: { id: string } }) {
 
                 <Contact claimed={winner?.claimed} active={item.active} seller={item.user.id} buyer={user?.id} chat={'h'} details={item?.id} />
 
-                <Bids initialItem={item} />
+                <div className="border rounded-lg overflow-hidden">
+                    <Table>
+                        <TableHeader>
+                            <TableRow>
+                                <TableHead>User</TableHead>
+                                <TableHead>Bid</TableHead>
+                                <TableHead>Date/Time</TableHead>
+                            </TableRow>
+                        </TableHeader>
+                        <TableBody>
+                            <TableRow>
+                                <TableCell>
+                                    <div className="flex items-center gap-4">
+                                        <Avatar className="w-4 h-4">
+                                            <AvatarImage alt="Seller Avatar" src={item?.user?.image || "/placeholder-user.jpg"} />
+                                            <AvatarFallback>JS</AvatarFallback>
+                                        </Avatar>
+                                        <span className="font-medium">{item?.user.name || "Full Name"}</span>
+                                    </div>
+                                </TableCell>
+                                <TableCell>₹{item?.basePrice}</TableCell>
+                                <TableCell>{item?.createdAt.toString().slice(0, 10)} ~ {item?.createdAt.toString().slice(11, 16)}</TableCell>
+                            </TableRow>
+
+                            {item?.bids?.map((bid, index) => {
+                                return (
+                                    <TableRow key={index}>
+                                        <TableCell>
+                                            <div className="flex items-center gap-4">
+                                                <Avatar className="w-4 h-4">
+                                                    <AvatarImage alt="Seller Avatar" src={bid.user.image || "/placeholder-user.jpg"} />
+                                                </Avatar>
+                                                <span className="font-medium">{bid.user.name || "Full Name"}</span>
+                                            </div>
+                                        </TableCell>
+                                        <TableCell>₹{bid.amount}</TableCell>
+                                        <TableCell>{bid.createdAt.toString().slice(0, 10)} ~ {bid.createdAt.toString().slice(11, 16)}</TableCell>
+                                    </TableRow>
+                                )
+                            })}
+
+                            <Bids id={params.id} />
+
+                        </TableBody>
+                    </Table>
+                </div>
+
             </div>
         </div >
     )
