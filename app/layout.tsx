@@ -41,3 +41,5 @@ export default function RootLayout({
     </html>
   );
 }
+
+//TODO: Add zustand for managing state and context for managing auth

@@ -56,12 +56,11 @@ interface Winner {
 }
 
 export default async function page({ params }: { params: { id: string } }) {
-    const res = await fetch(path + '/api/items/' + params.id, { cache: 'no-store' })
+    const res = await fetch(`${path}'/api/items/${params.id}`, { cache: 'no-store' })
     const user = (await session())?.user;
     const item: Item = await res.json()
     //@ts-ignore
     const winner = item?.winner[0]
-    console.log(item)
 
     return (
         <div key="1" className="grid md:grid-cols-2 gap-6 lg:gap-12 items-start max-w-6xl px-4 mx-auto py-6">

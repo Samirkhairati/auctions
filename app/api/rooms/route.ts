@@ -1,5 +1,6 @@
 import prisma from '@/lib/prisma';
 
+
 export async function POST(req: Request) {
     try {
         const { userId1, userId2 } = await req.json();
@@ -23,7 +24,6 @@ export async function POST(req: Request) {
         });
 
         if (existingRoom) {
-            console.log('Room already exists');
             return new Response(JSON.stringify(existingRoom), { status: 200 });
         }
 
