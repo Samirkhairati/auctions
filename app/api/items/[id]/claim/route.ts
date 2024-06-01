@@ -55,7 +55,7 @@ export async function PUT(request: Request, { params }: { params: { id: string }
     })
     if (user.id !== winner?.userId) return Response.json({ error: "You are not the winner of this item" })
     if (token === winner?.token) {
-        pusherServer.trigger(params.id, 'claim', "")
+        await pusherServer.trigger(params.id, 'claim', "")
         const updatedWinner = await prisma.winner.update({
             where: {
                 id: winner?.id

@@ -120,7 +120,7 @@ export async function PUT(request: Request, { params }: { params: { id: string }
         amount: amount,
         createdAt: new Date(),
     }
-    pusherServer.trigger(params.id, 'bids', data)
+    await pusherServer.trigger(params.id, 'bids', data)
 
     const updatedItem = await prisma.item.update({
         where: {

@@ -10,7 +10,7 @@ export async function POST(request: Request) {
     if (user.id !== userId) return Response.json({ message: "Unauthorized" })
 
 
-    pusherServer.trigger(roomId, 'message', { content, userId, roomId, user: { name: user.name } })
+    await pusherServer.trigger(roomId, 'message', { content, userId, roomId, user: { name: user.name } })
 
     const newMessage = await prisma.message.create({
         data: {

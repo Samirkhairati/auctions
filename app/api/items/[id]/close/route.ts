@@ -65,7 +65,7 @@ export async function PUT(request: Request, { params }: { params: { id: string }
     if (!item?.active) return Response.json({ error: "Item is already closed" })
     if (item.bids.length === 0) return Response.json({ error: "No bids on this item" })
 
-    pusherServer.trigger(params.id, 'close', "")
+    await pusherServer.trigger(params.id, 'close', "")
 
     const updatedItem = await prisma.item.update({
         where: {
