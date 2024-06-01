@@ -1,6 +1,8 @@
 import { path } from '@/lib/utils';
 import ItemCard from '@/components/screens/item-card';
 import { User } from 'next-auth';
+import axios from 'axios';
+import getItems from '@/actions/getItems';
 
 interface Item {
   id: string;
@@ -38,8 +40,7 @@ interface Bid {
 
 
 export default async function Home() {
-
-  const items: Item[] = await (await fetch(`${path}/api/items`, {cache: 'no-store'})).json();
+  const items: Item[] = await getItems();
 
   return (
     <>

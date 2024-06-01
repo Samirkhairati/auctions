@@ -8,6 +8,8 @@ import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { SendIcon } from "@/components/layout/icons"
 import Chatbox from "@/components/layout/chat/chatbox"
+import getUserRooms from "@/actions/getUserRooms"
+import getMessagesByRoom from "@/actions/getMessagesByRoom"
 
 interface UserRoom {
     userId: string;
@@ -22,13 +24,14 @@ interface Room {
 
 export default async function Chat({ params }: { params: { id: string } }) {
     const user = (await session())?.user;
-    const userRooms: UserRoom[] = await (await fetch(`${path}/api/rooms/${user?.id}`, { cache: 'no-store' })).json();
+    //@ts-ignore
+    const userRooms: UserRoom[] = await getUserRooms(user?.id as string)
     const friends = userRooms?.map((userRoom) => {
         return { userId: userRoom.room.users[0].userId !== user?.id ? userRoom.room.users[0].user : userRoom.room.users[1].user, roomId: userRoom.roomId }
     })
     const currentRoom = userRooms.find((userRoom) => userRoom.roomId === params.id)
     const currentFriend = currentRoom?.room.users[0].userId !== user?.id ? currentRoom?.room.users[0].user : currentRoom?.room.users[1].user
-    const messages = await (await fetch(`${path}/api/messages/${params.id}`, { cache: 'no-store' })).json();
+    const messages = await getMessagesByRoom(params.id)
     return (
         <div className="w-full h-full flex justify-center items-center">
             <div className="grid grid-cols-[300px_1fr] max-w-4xl h-[500px] w-full rounded-lg border">

@@ -2,6 +2,7 @@ import Friend from "@/components/layout/chat/friend"
 import { User } from "next-auth"
 import { path } from "@/lib/utils"
 import session from "@/lib/session"
+import getUserRooms from "@/actions/getUserRooms";
 
 interface UserRoom {
     userId: string;
@@ -16,7 +17,8 @@ interface Room {
 
 export default async function Chat() {
     const user = (await session())?.user;
-    const userRooms: UserRoom[] = await (await fetch(`${path}/api/rooms/${user?.id}`, { cache: 'no-store' })).json();
+    //@ts-ignore
+    const userRooms: UserRoom[] = await getUserRooms(user?.id as string)
     const friends = userRooms?.map((userRoom) => {
         return { userId: userRoom.room.users[0].userId !== user?.id ? userRoom.room.users[0].user : userRoom.room.users[1].user, roomId: userRoom.roomId }
     })

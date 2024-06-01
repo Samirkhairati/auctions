@@ -8,6 +8,7 @@ import session from "@/lib/session"
 import Bids from "@/components/screens/bids"
 import { TableHead, TableRow, TableHeader, TableCell, TableBody, Table } from "@/components/ui/table"
 import { AvatarImage, AvatarFallback, Avatar } from "@/components/ui/avatar"
+import getItemById from "@/actions/getItemById"
 
 interface Item {
     id: string;
@@ -56,9 +57,8 @@ interface Winner {
 }
 
 export default async function page({ params }: { params: { id: string } }) {
-    const res = await fetch(`${path}/api/items/${params.id}`, { cache: 'no-store' })
+    const item: Item = await getItemById(params.id)
     const user = (await session())?.user;
-    const item: Item = await res.json()
     //@ts-ignore
     const winner = item?.winner[0]
 
