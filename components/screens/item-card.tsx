@@ -43,7 +43,7 @@ interface Bid {
 
 export default function Component({ item }: { item: Item }) {
   return (
-    <div className="bg-white rounded-lg shadow-md overflow-hidden w-full max-w-sm mx-auto pb-3">
+    <div className="bg-white rounded-lg shadow-md overflow-hidden w-full max-w-sm pb-3">
       <div className="relative">
         <Carousel className="aspect-[4/3]">
           <CarouselContent>

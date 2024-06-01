@@ -43,7 +43,7 @@ export default async function Home() {
 
   return (
     <>
-      <div className="flex items-center justify-center flex-wrap gap-5">
+      <div className="flex items-center justify-center flex-wrap gap-10">
         {items?.map((item, index) => (
           <ItemCard key={index} item={item} />
         ))}
