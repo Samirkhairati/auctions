@@ -44,7 +44,7 @@ npm run start
 <img width="1710" alt="Screenshot 2024-06-01 at 09 54 37" src="https://github.com/Samirkhairati/auctions2/assets/34453746/004aeeaf-b79d-4681-b19d-68c83867b780">
 <img width="1710" alt="Screenshot 2024-06-01 at 09 54 48" src="https://github.com/Samirkhairati/auctions2/assets/34453746/19e65337-a68e-417c-b64e-390221138b54">
 <img width="1710" alt="Screenshot 2024-06-01 at 09 58 13" src="https://github.com/Samirkhairati/auctions2/assets/34453746/ba6f25d4-bbd6-45db-b80d-def4ac00b2e0">
-![image](https://github.com/Samirkhairati/auctions2/assets/34453746/108606a6-63d7-46d3-9a02-e1a1431abdf4)
+<img width="1710" alt="Screenshot 2024-06-01 at 09 58 13" src="https://github.com/Samirkhairati/auctions2/assets/34453746/108606a6-63d7-46d3-9a02-e1a1431abdf4">
 
 
 
