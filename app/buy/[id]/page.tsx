@@ -71,11 +71,11 @@ export default async function page({ params }: { params: { id: string } }) {
                             return <CarouselMedia key={index} resource_type={media2.resource_type} secure_url={media2.secure_url} />
                         })}
                     </CarouselContent>
-                    <CarouselPrevious className="absolute left-2 top-1/2 -translate-y-1/2 bg-white rounded-full p-2 shadow-md hover:bg-gray-100 transition-colors">
-                        <ChevronLeftIcon className="h-4 w-4 text-gray-600" />
+                    <CarouselPrevious className="absolute left-2 top-1/2 -translate-y-1/2 bg-white dark:bg-black rounded-full p-2 shadow-md hover:bg-gray-100 transition-colors">
+                        <ChevronLeftIcon className="h-4 w-4 text-gray-600 dark:text-gray-300" />
                     </CarouselPrevious>
-                    <CarouselNext className="absolute right-2 top-1/2 -translate-y-1/2 bg-white rounded-full p-2 shadow-md hover:bg-gray-100 transition-colors">
-                        <ChevronRightIcon className="h-4 w-4 text-gray-600" />
+                    <CarouselNext className="absolute right-2 top-1/2 -translate-y-1/2 bg-white dark:bg-black rounded-full p-2 shadow-md hover:bg-gray-100 transition-colors">
+                        <ChevronRightIcon className="h-4 w-4 text-gray-600 dark:text-gray-300" />
                     </CarouselNext>
                 </Carousel>
             </div>

@@ -27,13 +27,13 @@ const UserMenu = ({ user }: UserMenuProps) => {
             <DropdownMenuContent align="end">
                 <DropdownMenuLabel>{user.name}</DropdownMenuLabel>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem><Link href="/settings">
+                {/* <DropdownMenuItem><Link href="/settings">
                     Settings
-                </Link></DropdownMenuItem>
-                <DropdownMenuItem><Link href="/about">
+                </Link></DropdownMenuItem> */}
+                {/* <DropdownMenuItem><Link href="/about">
                     About
-                </Link></DropdownMenuItem>
-                <DropdownMenuSeparator />
+                </Link></DropdownMenuItem> */}
+                {/* <DropdownMenuSeparator /> */}
                 <DropdownMenuItem>
                     <button onClick={() => signOut()}>
                         Logout

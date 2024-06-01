@@ -10,18 +10,17 @@ interface OptionsProps {
 
 export default function Options({ chat, details }: OptionsProps) {
 
-    //TODO: implement chat button
 
     return (
         <>
-            <Link prefetch={true} href="/chat">
+            {/* <Link prefetch={true} href="/chat">
                 <Button className="flex items-center" size="sm" variant="outline">
                     <IoChatboxOutline className="mr-2" />
                     Chat
                 </Button>
-            </Link>
+            </Link> */}
             <Link prefetch={true} href={`/buy/${details}`}>
-                <Button size="sm" variant="outline">
+                <Button className="dark:text-white" size="sm" variant="outline">
                     <TbListDetails className="mr-2" />
                     Details
                 </Button>

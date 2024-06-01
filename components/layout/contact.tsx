@@ -124,13 +124,16 @@ export default function Contact({ chat, details, buyer, seller, active, claimed 
     }
 
     const handleChat = async () => {
+        toast.loading("Redirecting to chat")
         await axios.post(`/api/rooms`, { userId1: buyer, userId2: seller })
             .then(function (response) {
                 if (response.data.error) {
                     toast.error(response.data.error)
+                    toast.dismiss()
                     return
                 } else {
                     router.push(`/chat/${response.data.id}`)
+                    toast.dismiss()
                 }
             })
             .catch(function (error) {
@@ -170,7 +173,7 @@ export default function Contact({ chat, details, buyer, seller, active, claimed 
                             </Button>}
                     </DialogTrigger>
                     {!generating &&
-                        <DialogContent className="w-auto">
+                        <DialogContent className="w-auto bg-white">
                             <QRCodeSVG value={qr} />
                         </DialogContent>
                     }
