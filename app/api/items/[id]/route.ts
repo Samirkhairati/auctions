@@ -3,6 +3,9 @@ import prisma from '@/lib/prisma';
 import session from '@/lib/session';
 import { User } from 'next-auth';
 import { pusherServer } from '@/lib/pusher';
+import redis from '@/lib/redis';
+import { cache } from 'react';
+
 
 interface Item {
     id: string;
@@ -55,6 +58,10 @@ export async function GET(
     { params }: { params: { id: string } }
 ) {
     const id = params.id
+
+    const cachedItem = await redis.get(`item:${id}`)
+    if (cachedItem) return Response.json(JSON.parse(cachedItem))
+
     const item = await prisma.item.findUnique({
         where: {
             id: id
@@ -135,5 +142,6 @@ export async function PUT(request: Request, { params }: { params: { id: string }
             },
         },
     })
+    await redis.set(`item:${params.id}`, JSON.stringify(updatedItem))
     return Response.json(updatedItem)
 }

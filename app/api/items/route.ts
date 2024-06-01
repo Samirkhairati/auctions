@@ -1,5 +1,6 @@
 import prisma from '@/lib/prisma';
 import session from '@/lib/session';
+import redis from '@/lib/redis';
 
 interface ItemFormData {
     name: string;
@@ -16,6 +17,9 @@ interface UploadedFile {
 
 export async function GET(request: Request) {
     try {
+        const cachedItems = await redis.get("items")
+        if (cachedItems) return Response.json(JSON.parse(cachedItems))
+
         const items = await prisma.item.findMany({
             include: {
                 media: true,
@@ -24,6 +28,7 @@ export async function GET(request: Request) {
                 winner: true,
             }
         })
+        await redis.set("items", JSON.stringify(items))
         return Response.json(items)
     } catch (error) {
         return Response.json({})
@@ -54,5 +59,6 @@ export async function POST(request: Request) {
             },
         },
     });
+    await redis.del("items")
     return Response.json(newItem)
 }

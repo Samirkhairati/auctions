@@ -56,7 +56,7 @@ interface Winner {
 }
 
 export default async function page({ params }: { params: { id: string } }) {
-    const res = await fetch(`${path}'/api/items/${params.id}`, { cache: 'no-store' })
+    const res = await fetch(`${path}/api/items/${params.id}`, { cache: 'no-store' })
     const user = (await session())?.user;
     const item: Item = await res.json()
     //@ts-ignore
