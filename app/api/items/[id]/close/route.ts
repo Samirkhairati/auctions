@@ -3,7 +3,7 @@ import prisma from '@/lib/prisma';
 import session from '@/lib/session';
 import { User } from 'next-auth';
 import { pusherServer } from '@/lib/pusher';
-
+import redis from '@/lib/redis';
 
 interface Item {
     id: string;
@@ -91,6 +91,6 @@ export async function PUT(request: Request, { params }: { params: { id: string }
         },
     })
 
-
+    await redis.del(`item:${params.id}`)
     return Response.json(updatedItem)
 }

@@ -77,6 +77,7 @@ export async function GET(
             winner: true
         }
     })
+    await redis.set(`item:${id}`, JSON.stringify(item))
     return Response.json(item)
 }
 
@@ -140,8 +141,9 @@ export async function PUT(request: Request, { params }: { params: { id: string }
                     user: true,
                 },
             },
+
         },
     })
-    await redis.set(`item:${params.id}`, JSON.stringify(updatedItem))
+    await redis.del(`item:${params.id}`)
     return Response.json(updatedItem)
 }

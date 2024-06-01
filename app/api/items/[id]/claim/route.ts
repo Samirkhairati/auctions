@@ -3,6 +3,7 @@ import prisma from '@/lib/prisma';
 import session from '@/lib/session';
 import { User } from 'next-auth';
 import { pusherServer } from '@/lib/pusher';
+import redis from '@/lib/redis';
 
 
 interface Item {
@@ -63,6 +64,7 @@ export async function PUT(request: Request, { params }: { params: { id: string }
                 claimed: true
             },
         })
+        await redis.del(`item:${params.id}`)
         return Response.json(updatedWinner)
     } else {
         return Response.json({ error: "Invalid QR Code" })

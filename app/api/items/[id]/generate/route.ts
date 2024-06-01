@@ -1,5 +1,5 @@
 import prisma from '@/lib/prisma';
-
+import redis from '@/lib/redis';
 
 export async function POST(request: Request) {
 
@@ -10,5 +10,6 @@ export async function POST(request: Request) {
             itemId: body.itemId
         }
     })
+    await redis.del(`item:${body.itemId}`)
     return Response.json({token: winner?.token})
 }
