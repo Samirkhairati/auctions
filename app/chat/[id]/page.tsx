@@ -10,6 +10,7 @@ import { SendIcon } from "@/components/layout/icons"
 import Chatbox from "@/components/layout/chat/chatbox"
 import getUserRooms from "@/actions/getUserRooms"
 import getMessagesByRoom from "@/actions/getMessagesByRoom"
+import { redirect } from "next/navigation"
 
 interface UserRoom {
     userId: string;
@@ -24,6 +25,7 @@ interface Room {
 
 export default async function Chat({ params }: { params: { id: string } }) {
     const user = (await session())?.user;
+    if (!user) redirect("/api/auth/signin")
     //@ts-ignore
     const userRooms: UserRoom[] = await getUserRooms(user?.id as string)
     const friends = userRooms?.map((userRoom) => {
@@ -37,6 +39,7 @@ export default async function Chat({ params }: { params: { id: string } }) {
             <div className="grid grid-cols-[300px_1fr] max-w-4xl h-[500px] w-full rounded-lg border">
                 <div className="md:block hidden bg-gray-100/20 p-3 border-r dark:bg-gray-800/20">
                     <div className="grid gap-2">
+                        {friends?.length === 0 && <div className="text-center w-full h-full flex justify-center items-center"><br /><br /><br /><br /><br /><br /><br /><br />No conversations yet. <br />Click chat with Seller on an item.</div>}
                         {friends?.map((friend, index) => (
                             <Friend key={index} name={friend?.userId.name as string} image={friend?.userId.image as string} friendId={friend?.roomId as string} />
                         ))}
