@@ -13,7 +13,7 @@ export default async function getItems() {
                 winner: true,
             }
         })
-        await redis.set("items", JSON.stringify(items), "EX", 10 )
+        await redis.set("items", JSON.stringify(items), "EX", 30 )
         return items
     } catch (error: any) {
         return ({error: error.message})
