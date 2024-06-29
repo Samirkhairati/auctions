@@ -1,4 +1,17 @@
-# Auctions: a real-time live bidding app
+# ♠️ Auctions: a real-time live bidding app
+
+## Screenshots
+
+<img width="1710" alt="Screenshot 2024-06-01 at 09 29 59" src="https://github.com/Samirkhairati/auctions2/assets/34453746/85f2e766-8d5b-48bc-a2e8-8894e6095f69">
+<img width="1710" alt="Screenshot 2024-06-01 at 09 36 47" src="https://github.com/Samirkhairati/auctions2/assets/34453746/535ec527-291b-4863-9b8f-c28ac1945d1c">
+<img width="1710" alt="Screenshot 2024-06-01 at 09 38 14" src="https://github.com/Samirkhairati/auctions2/assets/34453746/754f3c98-c0f9-4318-b61b-d1976a1a11f4">
+<img width="1710" alt="Screenshot 2024-06-01 at 09 54 01" src="https://github.com/Samirkhairati/auctions2/assets/34453746/a092801e-6f7d-49ce-b796-0c266c84cf89">
+<img width="1710" alt="Screenshot 2024-06-01 at 09 54 27" src="https://github.com/Samirkhairati/auctions2/assets/34453746/74f38882-6a8f-4f6e-9877-df91a536f149">
+<img width="1710" alt="Screenshot 2024-06-01 at 09 54 37" src="https://github.com/Samirkhairati/auctions2/assets/34453746/004aeeaf-b79d-4681-b19d-68c83867b780">
+<img width="1710" alt="Screenshot 2024-06-01 at 09 54 48" src="https://github.com/Samirkhairati/auctions2/assets/34453746/19e65337-a68e-417c-b64e-390221138b54">
+<img width="1710" alt="Screenshot 2024-06-01 at 09 58 13" src="https://github.com/Samirkhairati/auctions2/assets/34453746/ba6f25d4-bbd6-45db-b80d-def4ac00b2e0">
+<img width="1710" alt="Screenshot 2024-06-01 at 09 58 13" src="https://github.com/Samirkhairati/auctions2/assets/34453746/108606a6-63d7-46d3-9a02-e1a1431abdf4">
+
 
 ## Features
 
@@ -33,18 +46,6 @@ npm i
 npm run build
 npm run start
 ```
-   
-## Screenshots
-
-<img width="1710" alt="Screenshot 2024-06-01 at 09 29 59" src="https://github.com/Samirkhairati/auctions2/assets/34453746/85f2e766-8d5b-48bc-a2e8-8894e6095f69">
-<img width="1710" alt="Screenshot 2024-06-01 at 09 36 47" src="https://github.com/Samirkhairati/auctions2/assets/34453746/535ec527-291b-4863-9b8f-c28ac1945d1c">
-<img width="1710" alt="Screenshot 2024-06-01 at 09 38 14" src="https://github.com/Samirkhairati/auctions2/assets/34453746/754f3c98-c0f9-4318-b61b-d1976a1a11f4">
-<img width="1710" alt="Screenshot 2024-06-01 at 09 54 01" src="https://github.com/Samirkhairati/auctions2/assets/34453746/a092801e-6f7d-49ce-b796-0c266c84cf89">
-<img width="1710" alt="Screenshot 2024-06-01 at 09 54 27" src="https://github.com/Samirkhairati/auctions2/assets/34453746/74f38882-6a8f-4f6e-9877-df91a536f149">
-<img width="1710" alt="Screenshot 2024-06-01 at 09 54 37" src="https://github.com/Samirkhairati/auctions2/assets/34453746/004aeeaf-b79d-4681-b19d-68c83867b780">
-<img width="1710" alt="Screenshot 2024-06-01 at 09 54 48" src="https://github.com/Samirkhairati/auctions2/assets/34453746/19e65337-a68e-417c-b64e-390221138b54">
-<img width="1710" alt="Screenshot 2024-06-01 at 09 58 13" src="https://github.com/Samirkhairati/auctions2/assets/34453746/ba6f25d4-bbd6-45db-b80d-def4ac00b2e0">
-<img width="1710" alt="Screenshot 2024-06-01 at 09 58 13" src="https://github.com/Samirkhairati/auctions2/assets/34453746/108606a6-63d7-46d3-9a02-e1a1431abdf4">
 
 
 
