@@ -2,15 +2,15 @@
 
 ## Screenshots
 
-<img width="1710" alt="Screenshot 2024-06-01 at 09 29 59" src="https://github.com/Samirkhairati/auctions2/assets/34453746/85f2e766-8d5b-48bc-a2e8-8894e6095f69">
-<img width="1710" alt="Screenshot 2024-06-01 at 09 36 47" src="https://github.com/Samirkhairati/auctions2/assets/34453746/535ec527-291b-4863-9b8f-c28ac1945d1c">
-<img width="1710" alt="Screenshot 2024-06-01 at 09 38 14" src="https://github.com/Samirkhairati/auctions2/assets/34453746/754f3c98-c0f9-4318-b61b-d1976a1a11f4">
-<img width="1710" alt="Screenshot 2024-06-01 at 09 54 01" src="https://github.com/Samirkhairati/auctions2/assets/34453746/a092801e-6f7d-49ce-b796-0c266c84cf89">
-<img width="1710" alt="Screenshot 2024-06-01 at 09 54 27" src="https://github.com/Samirkhairati/auctions2/assets/34453746/74f38882-6a8f-4f6e-9877-df91a536f149">
-<img width="1710" alt="Screenshot 2024-06-01 at 09 54 37" src="https://github.com/Samirkhairati/auctions2/assets/34453746/004aeeaf-b79d-4681-b19d-68c83867b780">
-<img width="1710" alt="Screenshot 2024-06-01 at 09 54 48" src="https://github.com/Samirkhairati/auctions2/assets/34453746/19e65337-a68e-417c-b64e-390221138b54">
-<img width="1710" alt="Screenshot 2024-06-01 at 09 58 13" src="https://github.com/Samirkhairati/auctions2/assets/34453746/ba6f25d4-bbd6-45db-b80d-def4ac00b2e0">
-<img width="1710" alt="Screenshot 2024-06-01 at 09 58 13" src="https://github.com/Samirkhairati/auctions2/assets/34453746/108606a6-63d7-46d3-9a02-e1a1431abdf4">
+![image](https://github.com/user-attachments/assets/f3adb4a4-6d01-496a-abeb-ba1562b34ccc)
+![image](https://github.com/user-attachments/assets/321f932e-8e96-496f-b8c4-e7d0d35e95f3)
+![image](https://github.com/user-attachments/assets/a59c0574-49d6-4dea-99ee-d9a080371693)
+![image](https://github.com/user-attachments/assets/426f89b1-72fa-4ca8-838f-f3c0597fbc72)
+![image](https://github.com/user-attachments/assets/cc8c0b05-2dda-4d06-b77d-e5acd4ca8a3b)
+![image](https://github.com/user-attachments/assets/79cb9c50-b295-443a-bedd-9d59e69d6bcd)
+![image](https://github.com/user-attachments/assets/95b6c3b7-8b1f-4d24-a380-8f639cc91d6a)
+![image](https://github.com/user-attachments/assets/0bfc4e6f-3077-4db7-89c8-3cf5b38df9a7)
+![image](https://github.com/user-attachments/assets/4bcd27aa-3889-4140-9646-16aaa738db9f)
 
 
 ## Features
